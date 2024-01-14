@@ -4,7 +4,7 @@ logger.disabled = True
 
 from tools.pinecone import QA
 from conv.agent import get_agent
-from conv.replier import get_replier
+from conv.replier import get_replier, get_exllama_replier
 from tools.tools import initialize_tools
 
 
@@ -15,7 +15,7 @@ agent = get_agent(
     tools=tools
 )
 
-replier = get_replier()
+replier = get_exllama_replier()
 
 while True:
     user_input = input("You: ")
