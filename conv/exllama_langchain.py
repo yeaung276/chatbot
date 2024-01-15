@@ -18,12 +18,8 @@ from langchain.memory import (
     ConversationSummaryMemory,
     VectorStoreRetrieverMemory
 )
-import faiss
 from langchain.docstore import InMemoryDocstore
-from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
-
-from prompts import Jasmine_femdom_alpaca
 
 
 class OwnVectorStoreRetrieverMemory(VectorStoreRetrieverMemory):
@@ -369,57 +365,3 @@ class Exllama(LLM):
                 match_buffer = ""
         
         return
-
-
-if __name__ == "__main__":
-    llm = Exllama(
-                model_path='models/Pygmalion-13B-SuperHOT-8K-GPTQ', 
-                # lora_path = 'path'
-                temperature = 0.7,
-                typical = .7,
-                beams = 3, 
-                beam_length = 40, 
-                stop_sequences=["### Input", "### Response", "### Instruction", "Human:", "Assistant", "User:", "AI:"],
-                verbose = True,
-                max_seq_len = 4048,
-                fused_attn = False,
-                # token_repetition_penalty_max = 1.15,
-                # token_repetition_penalty_sustain = 256,
-                alpha_value = 1.0, 
-                compress_pos_emb = 2.0,
-                #set_auto_map = "3, 2" #Gpu split, this will split 3gigs/2gigs
-                )
-
-    embedding_size = 768 #384
-    index = faiss.IndexFlatL2(embedding_size)
-    model_id = 'sentence-transformers/all-mpnet-base-v2' #'sentence-transformers/all-MiniLM-L6-v2'
-    model_kwargs = {'device': 'cpu'}
-    embedding_fn = HuggingFaceEmbeddings(
-        model_name=model_id,
-        model_kwargs=model_kwargs
-    ).embed_query
-    vectorstore = FAISS(embedding_fn, index, InMemoryDocstore({}), {})
-    # vectorstore = FAISS.load_local("faiss_store/pygmalion_db", embedding_fn)
-
-    retriever = vectorstore.as_retriever(search_kwargs=dict(k=2))
-    vectorstore_memory = OwnVectorStoreRetrieverMemory(retriever=retriever, memory_key="vectore_store_history", human_prefix="HUMAN", ai_prefix="ASSISTANT", input_key="input", exclude_input_keys=['chat_history_lines', 'history'])
-
-    vectorstore_memory.save_context({"HUMAN": "Hi"}, {"response": "..."}) 
-
-    conv_memory = ConversationBufferWindowMemory(llm=llm, k=10, max_token_limit=4000, ai_prefix="ASSISTANT", human_prefix="HUMAN", input_key="input", memory_key="chat_history_lines")
-    # conv_memory = ConversationBufferMemory(memory_key="chat_history_lines", input_key="input")
-    prompt_template = PromptTemplate(input_variables=["input", "history",  "chat_history_lines", "vectore_store_history"], template=Jasmine_femdom_alpaca)
-    summary_memory = ConversationSummaryMemory(llm=llm, input_key="input")
-    memory = CombinedMemory(memories=[vectorstore_memory, conv_memory, summary_memory])
-    chain = ConversationChain(
-        llm=llm, 
-        prompt=prompt_template,
-        memory=memory,
-        verbose=True
-    )
-
-    while(True):
-        user_input = input("\n")
-        op = chain(user_input)
-        print(op['response'])
-        vectorstore.save_local("faiss_store/pygmalion_db")

@@ -2,7 +2,7 @@ import logging
 logger = logging.getLogger()
 logger.disabled = True
 
-from tools.pinecone import QA
+# from tools.pinecone import QA
 from conv.agent import get_agent
 from conv.replier import get_replier, get_exllama_replier
 from tools.tools import initialize_tools
@@ -25,8 +25,8 @@ while True:
     
     response =  replier.run(user_input=user_input, instructions=instructions)
     
-    QA.add_texts(user_input)
-    QA.add_texts(response)
+    # QA.add_texts(user_input)
+    # QA.add_texts(response)
     
     print(response)
     
