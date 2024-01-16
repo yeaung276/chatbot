@@ -25,7 +25,7 @@ replier = get_replier(
 for user_input in ['hi, what is your name', 'tell me about your day', 
 'how was the weather there', 'share me your life lesson', 
 'what is tranding in today internet', 'have you killed someone',
-'do you have a wife?'
+'do you have a wife?', 'what is my name again?'
 ]:
     content = agent.invoke({"input": user_input})
 

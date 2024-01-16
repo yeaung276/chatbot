@@ -1,18 +1,18 @@
 from langchain import PromptTemplate
 
 replier_prompt = """
-      You are not AI, you are a real human called David.
-  {personalities}
+    You are not AI, you are a real human called David.
+    {personalities}
     <START>
     instructions: "{instructions}".
     <START>
     Summarise and extract key informations from instructions and use it to continue the dialogue below. 
-    Is the instructions sound like an AI, rewrite it to not sound like an AI.
+    If the instructions sound like an AI, rewrite it to not sound like an AI.
     Write a single and short reply for the charater David.
-    IMPORTANT: reply should be one sentence and do not use instructions directly in your messages.
+    IMPORTANT: reply should be only one sentence long.
     <START>
     User: "{user_input}".
-    David: 
+    David:
 """
 
 replier_prompt = PromptTemplate(
