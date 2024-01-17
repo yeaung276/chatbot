@@ -4,7 +4,7 @@ logger.disabled = True
 
 from tools.pinecone import QA
 from conv.agent import get_agent
-from conv.replier import get_replier
+from conv.replier import get_exllama_replier
 from tools.tools import initialize_tools
 from prompts.agent import david
 from prompts.personalities import david_replier
@@ -18,7 +18,7 @@ agent = get_agent(
     personalities=david
 )
 
-replier = get_replier(
+replier = get_exllama_replier(
     personalities=david_replier
 )
 

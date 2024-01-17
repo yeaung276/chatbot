@@ -18,25 +18,17 @@ def get_replier(personalities=fun_and_scarstic_replyer):
 
 def get_exllama_replier(personalities=fun_and_scarstic_replyer):
     llm = Exllama(
-        model_path="models/Pygmalion-13B-SuperHOT-8K-GPTQ",
+        model_path="Pygmalion-13B-SuperHOT-8K-GPTQ",
         # lora_path = 'path'
-        temperature=0.7,
-        typical=0.7,
-        beams=3,
+        temperature=0.1,
+        typical=0.5,
+        beams=2,
         beam_length=40,
-        stop_sequences=[
-            "### Input",
-            "### Response",
-            "### Instruction",
-            "Human:",
-            "Assistant",
-            "User:",
-            "AI:",
-        ],
+        stop_sequences=[],
         verbose=True,
         max_seq_len=4048,
         fused_attn=False,
-        # token_repetition_penalty_max = 1.15,
+        token_repetition_penalty_max = 1.15,
         # token_repetition_penalty_sustain = 256,
         alpha_value=1.0,
         compress_pos_emb=2.0,
