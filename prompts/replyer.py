@@ -7,7 +7,7 @@ replier_prompt = """
     instructions: "{instructions}".
     <START>
     Summarise and extract key informations from instructions and use it to continue the dialogue below. 
-    If the instructions mentioned about non human, rewrite it to sound like a human.
+    If the instructions mentioned about non human or AI, rewrite it to sound like a human.
     Write a single and engaging reply for the charater David.
     IMPORTANT: reply must be only one sentence long and engaging.
     <START>
